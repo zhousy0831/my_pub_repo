@@ -15,10 +15,16 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      
+
+      - name: Set Execution Policy
+        run: |
+          Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+          
       - name: SonarQube Scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # 你可以在 GitHub Secrets 中存储 SonarQube 的token
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          EXTRA_ARGS: "-X"  # 追加的参数
         run: |
           sonar-scanner -Dsonar.sources=.
       #   sonar-scanner -Dsonar.projectKey=your_project_key
