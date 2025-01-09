@@ -26,10 +26,10 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # 令牌
           SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}  # 项目密钥
-          SONAR_HOST_URL: http://159.99.218.157:9002
+          SONAR_HOST_URL: http://159.99.218.157:9002/
         run: |
           setlocal enabledelayedexpansion
-          for /f "tokens=*" %%i in ('curl -s -u %SONAR_TOKEN%: "%SONAR_HOST_URL%/api/qualitygates/project_status?projectKey=%SONAR_PROJECT_KEY%"') do (
+          for /f "tokens=*" %%i in ('curl -s -u %SONAR_TOKEN%: "%SONAR_HOST_URL%api/qualitygates/project_status?projectKey=%SONAR_PROJECT_KEY%"') do (
               set "line=%%i"
           )
           echo Quality Gate status: !line!
