@@ -28,16 +28,16 @@ jobs:
           SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}  # 项目密钥
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
-          STATUS=$(curl -s -u $SONAR_TOKEN: \\
-            "$SONAR_HOST_URL/api/qualitygates/project_status?projectKey=$SONAR_PROJECT_KEY" | \\
-            jq -r .projectStatus.status)
-
-          echo "Quality Gate status: $STATUS"
-
-          if [ "$STATUS" != "OK" ]; then
-            echo "Quality gate failed!"
-            exit 1
-          fi
+          setlocal enabledelayedexpansion
+          for /f "tokens=*" %%i in ('curl -s -u %SONAR_TOKEN%: "%SONAR_HOST_URL%/api/qualitygates/project_status?projectKey=%SONAR_PROJECT_KEY%"') do (
+              set "line=%%i"
+          )
+          echo Quality Gate status: !line!
+          echo !line! | findstr "OK" >nul
+          if errorlevel 1 (
+              echo Quality gate failed!
+              exit /b 1
+          )
       #- name: SonarQube Scan
       #  env:
       #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # 你可以在 GitHub Secrets 中存储 SonarQube 的token
