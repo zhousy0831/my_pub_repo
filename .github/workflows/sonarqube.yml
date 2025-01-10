@@ -21,13 +21,6 @@ jobs:
         run: |
           sonar-scanner
 
-      - name: Wait for sonarqube scan finished
-        shell: cmd
-        run: |
-          echo Waiting for 2 minutes...
-          cmd /c "timeout /t 120"
-
-
       - name: Check SonarQube Quality Gate
         shell: cmd
         env:
