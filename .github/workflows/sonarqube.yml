@@ -34,6 +34,7 @@ jobs:
 
       - name: SonarQube Quality Gate
         run: |
+          shell: cmd
           if [ "${{ env.quality_gate_status }}" -eq 0 ]; then
             echo "SonarQube Quality Gate Passed!"
           else
