@@ -21,23 +21,44 @@ jobs:
         run: |
           sonar-scanner
           
-      - name: Check SonarQube Quality Gate
+      - name: Get SonarQube Quality Gate
         shell: cmd
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # 令牌
-          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}  # 项目密钥
-          SONAR_HOST_URL: http://159.99.218.157:9002/
+          token: sqp_6dda38485271affa1a4c09ca2df9734754d6551b
+          project_key: my_pub_repo
+          host_url: http://159.99.218.157:9002
         run: |
-          setlocal enabledelayedexpansion
-          for /f "tokens=*" %%i in ('curl -s -u %SONAR_TOKEN%: "%SONAR_HOST_URL%api/qualitygates/project_status?projectKey=%SONAR_PROJECT_KEY%"') do (
-              set "line=%%i"
+          cd C:\Work\projects\SonarQube\source\
+          python sonarqube_get_quality_gate_status.py > result.txt
+          set /p result=<result.txt
+          if %ERRORLEVEL%==0 (
+            echo SonarQube Quality Gate Passed!. Result: %result%
+          ) else (
+            echo SonarQube Quality Gate failed with exit code: %ERRORLEVEL%.
+            exit /b %ERRORLEVEL%  # 退出工作流，状态为失败
           )
-          echo Quality Gate status: !line!
-          echo !line! | findstr "OK" >nul
-          if errorlevel 1 (
-              echo Quality gate failed!
-              exit /b 1
-          )
+
+      # - name: SonarQube Quality Gate
+      #   shell: cmd
+      #   run: |
+      #     echo "quality_gate_status=$?" >> $GITHUB_ENV
+      #     if [ "${{ env.quality_gate_status }}" -eq 0 ]; then
+      #       echo "SonarQube Quality Gate Passed!"
+      #     else
+      #       echo "SonarQube Quality Gate failed with exit code ${{ env.quality_gate_status }}"
+      #       exit 1
+      #     fi
+        # run: |
+        #   setlocal enabledelayedexpansion
+        #   for /f "tokens=*" %%i in ('curl -s -u %SONAR_TOKEN%: "%SONAR_HOST_URL%api/qualitygates/project_status?projectKey=%SONAR_PROJECT_KEY%"') do (
+        #       set "line=%%i"
+        #   )
+        #   echo Quality Gate status: !line!
+        #   echo !line! | findstr "OK" >nul
+        #   if errorlevel 1 (
+        #       echo Quality gate failed!
+        #       exit /b 1
+        #   )
       #- name: SonarQube Scan
       #  env:
       #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # 你可以在 GitHub Secrets 中存储 SonarQube 的token

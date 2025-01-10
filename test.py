@@ -1,6 +1,3 @@
-# import sys
-# import os
-# import json
-
 print("hello")
 print("world")
+print("Hi")
