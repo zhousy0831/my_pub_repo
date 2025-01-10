@@ -29,14 +29,14 @@ jobs:
           host_url: http://159.99.218.157:9002
         run: |
           cd C:\Work\projects\SonarQube\source\
-          result=$(python sonarqube_get_quality_gate_status.py)
-          exit_code=$?
-          if [ $exit_code -eq 0 ]; then
-            echo "SonarQube Quality Gate Passed!. Result: $result"
-          else
-            echo "SonarQube Quality Gate failed with exit code: $exit_code." 
-            exit $exit_code  # 退出工作流，状态为失败
-          fi
+          python sonarqube_get_quality_gate_status.py > result.txt
+          set /p result=<result.txt
+          if %ERRORLEVEL%==0 (
+            echo SonarQube Quality Gate Passed!. Result: %result%
+          ) else (
+            echo SonarQube Quality Gate failed with exit code: %ERRORLEVEL%.
+            exit /b %ERRORLEVEL%  # 退出工作流，状态为失败
+          )
 
       # - name: SonarQube Quality Gate
       #   shell: cmd
