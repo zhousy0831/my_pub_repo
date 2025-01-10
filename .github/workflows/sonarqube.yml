@@ -28,6 +28,9 @@ jobs:
           SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}  # 项目密钥
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
+          echo "SONAR_HOST_URL=${{ secrets.SONAR_HOST_URL }}"
+          echo "SONAR_TOKEN=${{ secrets.SONAR_TOKEN }}"
+          echo "SONAR_PROJECT_KEY=${{ secrets.SONAR_PROJECT_KEY }}"
           cd C:\Work\projects\SonarQube\source\
           python sonarqube_get_quality_gate_status.py
           echo "quality_gate_status=$?" >> $GITHUB_ENV
