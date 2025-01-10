@@ -33,8 +33,8 @@ jobs:
           echo "quality_gate_status=$?" >> $GITHUB_ENV
 
       - name: SonarQube Quality Gate
+        shell: cmd
         run: |
-          shell: cmd
           if [ "${{ env.quality_gate_status }}" -eq 0 ]; then
             echo "SonarQube Quality Gate Passed!"
           else
