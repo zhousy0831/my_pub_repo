@@ -24,16 +24,10 @@ jobs:
       - name: Get SonarQube Quality Gate
         shell: cmd
         env:
-          # SONAR_TOKEN1: ${{ secrets.SONAR_TOKEN }}  # 令牌
-          # SONAR_PROJECT_KEY1: ${{ secrets.SONAR_PROJECT_KEY }}  # 项目密钥
-          # SONAR_HOST_URL1: ${{ secrets.SONAR_HOST_URL }}
           token: sqp_6dda38485271affa1a4c09ca2df9734754d6551b
-          project_key: my_pub_repo
+          project_key: SOAT
           host_url: http://159.99.218.157:9002
         run: |
-          # echo "SONAR_HOST_URL=${{ secrets.SONAR_HOST_URL }}"
-          # echo "SONAR_TOKEN=${{ secrets.SONAR_TOKEN }}"
-          # echo "SONAR_PROJECT_KEY=${{ secrets.SONAR_PROJECT_KEY }}"
           cd C:\Work\projects\SonarQube\source\
           python sonarqube_get_quality_gate_status.py
           echo "quality_gate_status=$?" >> $GITHUB_ENV
