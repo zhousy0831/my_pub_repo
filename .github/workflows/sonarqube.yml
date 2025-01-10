@@ -29,18 +29,25 @@ jobs:
           host_url: http://159.99.218.157:9002
         run: |
           cd C:\Work\projects\SonarQube\source\
-          python sonarqube_get_quality_gate_status.py
-          echo "quality_gate_status=$?" >> $GITHUB_ENV
-
-      - name: SonarQube Quality Gate
-        shell: cmd
-        run: |
-          if [ "${{ env.quality_gate_status }}" -eq 0 ]; then
-            echo "SonarQube Quality Gate Passed!"
+          result=$(python sonarqube_get_quality_gate_status.py)
+          exit_code=$?
+          if [ $exit_code -eq 0 ]; then
+            echo "SonarQube Quality Gate Passed!. Result: $result"
           else
-            echo "SonarQube Quality Gate failed with exit code ${{ env.quality_gate_status }}"
-            exit 1
+            echo "SonarQube Quality Gate failed with exit code: $exit_code." 
+            exit $exit_code  # 退出工作流，状态为失败
           fi
+
+      # - name: SonarQube Quality Gate
+      #   shell: cmd
+      #   run: |
+      #     echo "quality_gate_status=$?" >> $GITHUB_ENV
+      #     if [ "${{ env.quality_gate_status }}" -eq 0 ]; then
+      #       echo "SonarQube Quality Gate Passed!"
+      #     else
+      #       echo "SonarQube Quality Gate failed with exit code ${{ env.quality_gate_status }}"
+      #       exit 1
+      #     fi
         # run: |
         #   setlocal enabledelayedexpansion
         #   for /f "tokens=*" %%i in ('curl -s -u %SONAR_TOKEN%: "%SONAR_HOST_URL%api/qualitygates/project_status?projectKey=%SONAR_PROJECT_KEY%"') do (
