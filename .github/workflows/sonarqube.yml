@@ -21,7 +21,7 @@ jobs:
         run: |
           sonar-scanner
           
-      - name: Get SonarQube Quality Gate
+      - name: Check SonarQube Quality Gate
         shell: cmd
         env:
           token: sqp_6dda38485271affa1a4c09ca2df9734754d6551b
@@ -30,16 +30,15 @@ jobs:
         run: |
           cd C:\Work\projects\SonarQube\source\
           python sonarqube_get_quality_gate_status.py
-          echo "return_code=$?" >> $GITHUB_ENV
 
-      - name: Check return code
-        shell: cmd
-        run: |
-          if [ "${{ env.return_code }}" -ne 0 ]; then
-              echo "Script failed with return code: ${{ env.return_code }}"
-          else
-              echo "Script executed successfully."
-          fi
+      # - name: Check return code
+      #   shell: cmd
+      #   run: |
+      #     if [ "${{ env.return_code }}" -ne 0 ]; then
+      #         echo "Script failed with return code: ${{ env.return_code }}"
+      #     else
+      #         echo "Script executed successfully."
+      #     fi
 
       # - name: SonarQube Quality Gate
       #   shell: cmd
