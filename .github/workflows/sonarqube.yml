@@ -20,6 +20,11 @@ jobs:
         shell: cmd
         run: |
           sonar-scanner
+
+      - name: Wait for 5 minutes using an action, wait for sonarqube scan finished
+        uses: jakejarvis/wait@v1
+        with:
+          time: '2m'
           
       - name: Check SonarQube Quality Gate
         shell: cmd
