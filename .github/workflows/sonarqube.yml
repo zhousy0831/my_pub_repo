@@ -31,12 +31,15 @@ jobs:
           cd C:\Work\projects\SonarQube\source\
           python sonarqube_get_quality_gate_status.py
           echo "result=$?" >> $GITHUB_ENV
-          if [ "${{ env.result }}" -eq 0]
-               echo "Script executed successfully."
-          else
-              echo "Script failed with return code: ${{ env.result }}"
-          fi
 
+      - name: Check return code
+        shell: cmd
+        run: |
+          if [ "${{ env.return_code }}" -ne 0 ]; then
+              echo "Script failed with return code: ${{ env.return_code }}"
+          else
+              echo "Script executed successfully."
+          fi
 
       # - name: SonarQube Quality Gate
       #   shell: cmd
