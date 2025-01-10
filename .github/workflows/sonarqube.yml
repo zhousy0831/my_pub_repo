@@ -30,7 +30,7 @@ jobs:
         run: |
           cd C:\Work\projects\SonarQube\source\
           python sonarqube_get_quality_gate_status.py
-          echo "result=$?" >> $GITHUB_ENV
+          echo "return_code=$?" >> $GITHUB_ENV
 
       - name: Check return code
         shell: cmd
