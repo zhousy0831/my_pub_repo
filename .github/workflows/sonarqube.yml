@@ -22,6 +22,7 @@ jobs:
           sonar-scanner
           
       - name: Get SonarQube Quality Gate
+        shell: cmd
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # 令牌
           SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}  # 项目密钥
